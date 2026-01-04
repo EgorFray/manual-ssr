@@ -68,14 +68,16 @@ const server = createServer((req, res) => {
 	const pathName = parse(req.url, true).pathname;
 
 	const htmlTemplate = readFileSync(`${__dirname}/index.html`, "utf-8");
+	const clientJs = readFileSync(`${__dirname}/client.js`, "utf-8");
 
 	if (pathName === "/") {
-		const renderedHtml = renderToString(<Home />);
-		const html = htmlTemplate.replace("%%%CONTENT%%%", renderedHtml);
+		const renderedReact = renderToString(<Home />);
+		const html = htmlTemplate.replace("%%%CONTENT%%%", renderedReact);
 		res.writeHead(200, { "Content-type": "text/html" });
-		res.end(renderedHtml);
-	} else if (pathName === "/test") {
-		res.end("Test");
+		res.end(html);
+	} else if (pathName === "/client.js") {
+		res.writeHead(200, { "Content-type": "appliation/javascript" });
+		res.end(clientJs);
 	} else {
 		res.end("The url cannot be found");
 	}
